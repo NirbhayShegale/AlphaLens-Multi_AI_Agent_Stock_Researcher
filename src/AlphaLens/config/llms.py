@@ -32,7 +32,7 @@ def get_synthesis_llm():
 @lru_cache(maxsize=1)
 def get_chatbot_llm():
     return ChatGroq(
-        model="openai/gpt-oss-120b",
+        model="llama-3.3-70b-versatile",
         temperature=0.1,      
         max_tokens=4096,      
     )
