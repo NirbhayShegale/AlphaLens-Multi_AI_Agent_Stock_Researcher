@@ -1,5 +1,6 @@
 import json
 import yfinance as yf
+from AlphaLens.utils.yf_utils import yf_delay
 import numpy as np
 from AlphaLens.SubAgent.risk_agent.risk_agent_prompt import RISK_REPORT_SYSTEM_PROMPT
 from langchain_core.messages import HumanMessage,SystemMessage
@@ -45,6 +46,7 @@ def risk_report_node(state: RiskState) -> RiskState:
 #=====================================================================================================
 @traceable
 def liquidity_risk(ticker: str) -> dict:
+    yf_delay()
     info= yf.Ticker(ticker).info
 
     avg_daily_volume=  info.get("averageVolume")
@@ -57,6 +59,7 @@ def liquidity_risk(ticker: str) -> dict:
 
 @traceable
 def Business_risk(ticker:str)-> dict:
+    yf_delay()
     symbol= yf.Ticker(ticker)
     info = symbol.info 
     financials = symbol.financials
@@ -78,6 +81,7 @@ def Business_risk(ticker:str)-> dict:
     
 @traceable
 def Financial_risk (ticker:str)-> dict:
+    yf_delay()
     symbol= yf.Ticker(ticker)
     info = symbol.info 
     financials = symbol.financials
@@ -136,6 +140,7 @@ def Financial_risk (ticker:str)-> dict:
 
 @traceable
 def market_risk(ticker: str) -> dict:
+    yf_delay()
     symbol= yf.Ticker(ticker)
     info = symbol.info
     df_hist=symbol.history(period="1y")

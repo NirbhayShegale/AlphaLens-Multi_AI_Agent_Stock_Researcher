@@ -3,6 +3,7 @@ from AlphaLens.config.llms import get_report_writer_llm
 from langchain_core.prompts import ChatPromptTemplate
 import requests
 import yfinance as yf
+from AlphaLens.utils.yf_utils import yf_delay
 
 
 
@@ -33,6 +34,7 @@ def ticker_extraction_tool(query: str) -> dict:
     session = requests.Session()
     session.headers.update({"User-Agent": "Mozilla/5.0 ..."})
 
+    yf_delay()
     search = yf.Search(result['company_name'], max_results=5, session=session)  # 5, not 1
     #no match
     if not search.quotes:
@@ -40,6 +42,7 @@ def ticker_extraction_tool(query: str) -> dict:
 
     # Only ONE match
     if len(search.quotes) == 1:
+        yf_delay()
         ticker_obj = yf.Ticker(search.quotes[0]['symbol'])
         info = ticker_obj.info
         return {"status": "resolved", "ticker": search.quotes[0]['symbol'], "name": info.get('longName') or info.get('shortName') }
@@ -47,6 +50,7 @@ def ticker_extraction_tool(query: str) -> dict:
     # MULTIPLE matches 
     candidates = []
     for quote in search.quotes[:5]:
+        yf_delay()
         ticker_obj = yf.Ticker(quote['symbol'])
         info = ticker_obj.info
         candidates.append({

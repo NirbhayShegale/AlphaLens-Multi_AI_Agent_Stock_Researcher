@@ -4,6 +4,7 @@ import pandas_ta as ta
 import pandas as pd
 import numpy as np
 import yfinance as yf
+from AlphaLens.utils.yf_utils import yf_delay
 from AlphaLens.SubAgent.technical_agent.technical_agent_prompt import REPORT_SYSTEM_PROMPT
 from AlphaLens.SubAgent.technical_agent.technical_agent_states import TechnicalState
 from AlphaLens.SubAgent.technical_agent.technical_agent_model import TechnicalReport
@@ -31,6 +32,7 @@ def technical_Agent_node(state: TechnicalState)->TechnicalState:
 @traceable
 def technical_agent_pipeline (ticker:str)->dict:
     period="1y"
+    yf_delay()
     df=yf.Ticker(ticker).history(period=period)
 
     if len(df) < 200:

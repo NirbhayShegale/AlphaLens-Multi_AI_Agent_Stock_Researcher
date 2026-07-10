@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 from langchain_core.tools import tool
+from AlphaLens.utils.yf_utils import yf_delay
 
 
 def _safe_get(df, row, col):
@@ -19,6 +20,7 @@ def _safe_get(df, row, col):
 def get_income_statement(ticker: str) -> dict:
     """Fetch revenue, EPS, net income, and margins for the last 3 years."""
     try:
+        yf_delay()
         stock = yf.Ticker(ticker)
         income = stock.financials  # annual income statement
  
@@ -46,6 +48,7 @@ def get_income_statement(ticker: str) -> dict:
 def get_balance_sheet(ticker: str) -> dict:
     """Fetch assets, liabilities, debt, and equity from the balance sheet."""
     try:
+        yf_delay()
         stock = yf.Ticker(ticker)
         bs = stock.balance_sheet
  
@@ -73,6 +76,7 @@ def get_balance_sheet(ticker: str) -> dict:
 def get_cash_flow(ticker: str) -> dict:
     """Fetch operating cash flow, free cash flow, and capex."""
     try:
+        yf_delay()
         stock = yf.Ticker(ticker)
         cf = stock.cashflow
  
@@ -102,6 +106,7 @@ def get_cash_flow(ticker: str) -> dict:
 def get_key_ratios(ticker: str) -> dict:
     """Fetch valuation and efficiency ratios: PE, PB, PS, ROE (calculated manually), debt-to-equity (calculated manually)."""
     try:
+        yf_delay()
         stock = yf.Ticker(ticker)
         info = stock.info
         
@@ -162,6 +167,7 @@ def get_key_ratios(ticker: str) -> dict:
 def get_company_info(ticker: str) -> dict:
     """Fetch company name, sector, industry, market cap, and analyst targets."""
     try:
+        yf_delay()
         stock = yf.Ticker(ticker)
         info  = stock.info
         description = info.get("longBusinessSummary") or "Not available"

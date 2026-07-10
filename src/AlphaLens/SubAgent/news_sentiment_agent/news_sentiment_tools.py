@@ -1,4 +1,5 @@
 import yfinance as yf
+from AlphaLens.utils.yf_utils import yf_delay
 from langchain_core.tools import tool
 import logging
 import requests
@@ -26,6 +27,7 @@ def news_yfinance(ticker:str)->list:
               - 'source' (str): The publisher or provider of the news.
               - 'url' (str): The canonical URL to the full article.
     """
+    yf_delay()
     stock_news = yf.Ticker(ticker).news
     response = [] 
     for item in stock_news:
@@ -75,6 +77,7 @@ def get_earnings_history(ticker: str) -> dict:
     """Fetch earnings beat/miss history and EPS surprises. Free via yfinance.
     Consistent beats = bullish signal. Misses = bearish red flag."""
     try:
+        yf_delay()
         stock    = yf.Ticker(ticker)
         yf_logger = logging.getLogger("yfinance")
         previous_level = yf_logger.level
@@ -120,6 +123,7 @@ def get_insider_transactions(ticker: str) -> dict:
     """Fetch recent insider buying and selling activity. Free via yfinance.
     Heavy insider selling = bearish signal. Buying = bullish signal."""
     try:
+        yf_delay()
         stock    = yf.Ticker(ticker)
         insider  = stock.insider_transactions
  

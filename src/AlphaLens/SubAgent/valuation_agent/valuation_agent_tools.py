@@ -3,11 +3,13 @@ import statistics
 import requests
 import pandas as pd
 import yfinance as yf
+from AlphaLens.utils.yf_utils import yf_delay
 
 
 @tool
 def get_company_info(ticker: str) -> dict:
     """Get current price, EPS, book value, and sector for valuation."""
+    yf_delay()
     info = yf.Ticker(ticker).info
     return {
         "current_price": (
@@ -27,6 +29,7 @@ def get_company_info(ticker: str) -> dict:
 @tool
 def get_dcf_inputs(ticker: str) -> dict:
     """Fetch FCF history, revenue growth for DCF model."""
+    yf_delay()
     stock    = yf.Ticker(ticker)
     info     = stock.info
     cashflow = stock.cashflow
@@ -69,12 +72,14 @@ def get_peer_multiples(peer_company: list) -> dict:
     not_found = []
  
     for company in peer_company:
+        yf_delay()
         search = yf.Search(company, max_results=1, session=session)
         if not search.quotes:
             not_found.append(company)
             continue
  
         detected_ticker = search.quotes[0]["symbol"]
+        yf_delay()
         info   = yf.Ticker(detected_ticker).info
         ev     = info.get("enterpriseValue")
         ebitda = info.get("ebitda")
