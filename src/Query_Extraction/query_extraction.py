@@ -35,7 +35,7 @@ def ticker_extraction_tool(query: str) -> dict:
     session.headers.update({"User-Agent": "Mozilla/5.0 ..."})
 
     yf_delay()
-    search = yf.Search(result['company_name'], max_results=5, session=session)  # 5, not 1
+    search = yf.Search(result['company_name'], max_results=3, session=session)  # 3, not 5
     #no match
     if not search.quotes:
         return {"status": "not_found", "message": f"No ticker found for '{result['company_name']}'"}
@@ -49,7 +49,7 @@ def ticker_extraction_tool(query: str) -> dict:
 
     # MULTIPLE matches 
     candidates = []
-    for quote in search.quotes[:5]:
+    for quote in search.quotes[:3]:
         yf_delay()
         ticker_obj = yf.Ticker(quote['symbol'])
         info = ticker_obj.info
@@ -60,4 +60,3 @@ def ticker_extraction_tool(query: str) -> dict:
         })
 
     return {"status": "needs_confirmation", "candidates": candidates}
-
