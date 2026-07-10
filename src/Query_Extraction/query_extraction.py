@@ -29,7 +29,7 @@ def ticker_extraction_tool(query: str) -> dict:
         return {"status": "not_found", "message": "Could not identify a company from your query."}
 
     try:
-        quotes = yf_search_with_retry(result['company_name'], max_results=5)
+        quotes = yf_search_with_retry(result['company_name'], max_results=3)
     except RuntimeError as exc:
         return {"status": "error", "message": str(exc)}
 
