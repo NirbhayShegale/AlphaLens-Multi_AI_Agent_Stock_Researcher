@@ -17,7 +17,7 @@ from components import (
     render_confidence_gauge,
 )
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://alphalens-multi-ai-agent-stock-researcher.onrender.com"
 
 # 2. Initialize Session State Variables
 if "memo" not in st.session_state:
