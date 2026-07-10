@@ -10,6 +10,6 @@ import random
 
 
 def yf_delay() -> None:
-    """Sleep for a random duration between 1 and 2 seconds."""
-    delay = random.uniform(1, 2)
+    """Sleep for a random duration between 1 and 3 seconds."""
+    delay = random.uniform(1,2)
     time.sleep(delay)
