@@ -6,10 +6,9 @@ from langsmith import traceable
 
 @traceable
 async def main(userquery: str):
-    ticker = ticker_resolver(userquery)
-    orchestrator_state = await workflow.ainvoke({"ticker": ticker})
+    candidate = ticker_resolver(userquery)
+    orchestrator_state = await workflow.ainvoke({"ticker": candidate['ticker']})
     memo = orchestrator_state["synthesis"]
-    ticker=orchestrator_state["ticker"]
     f_memo=json.dumps(memo, indent=2)
     print(f_memo)
 

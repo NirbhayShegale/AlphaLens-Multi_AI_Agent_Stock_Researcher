@@ -14,12 +14,12 @@ def read_root():
     return {"message": "Welcome to the Stock Research Agent API!"}
 
 
-# @app.post("/search_company")
-# @traceable(run_type="chain", name="API: Search Company") 
-# def company_stock(request: QueryRequest):
-#     ticker = ticker_extraction_tool(request.userquery)
+@app.post("/search_company")
+@traceable(run_type="chain", name="API: Search Company") 
+def company_stock(request: QueryRequest):
+    ticker = ticker_extraction_tool(request.userquery)
     
-#     return ticker
+    return ticker
 
 
 @app.post("/research")
