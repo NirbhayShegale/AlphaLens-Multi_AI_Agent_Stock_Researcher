@@ -1,4 +1,4 @@
-from langchain_community.tools import tool
+from langchain_core.tools import tool
 import statistics
 import requests
 import pandas as pd

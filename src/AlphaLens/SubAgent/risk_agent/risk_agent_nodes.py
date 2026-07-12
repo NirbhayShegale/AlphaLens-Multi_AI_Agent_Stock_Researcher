@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 import yfinance as yf
 from AlphaLens.utils.yf_utils import yf_delay
 import numpy as np
@@ -118,22 +119,37 @@ def Financial_risk (ticker:str)-> dict:
         else:
             diagnosis = "Positive FCF: Generating surplus cash."
 
-        current_assets = balance.loc[ 'Current Assets'].iloc[0]
-        current_liabilities = balance.loc[ 'Current Liabilities'].iloc[0]
-        cash= balance.loc[ 'Cash And Cash Equivalents'].iloc[0]
-        current_debt=balance.loc[ 'Total Debt'].iloc[0]
+        def _bs_get(row: str):
+            """Safely get a row from the balance sheet, returns None if missing."""
+            if row in balance.index:
+                val = balance.loc[row].iloc[0]
+                return float(val) if not pd.isna(val) else None
+            return None
 
-        operating_nwc = (current_assets - cash) - (current_liabilities - current_debt)
+        current_assets      = _bs_get('Current Assets')
+        current_liabilities = _bs_get('Current Liabilities')
+        cash                = _bs_get('Cash And Cash Equivalents')
+        current_debt        = _bs_get('Total Debt')
 
-        operating_nwc_status="Healthy" if operating_nwc > 0 else "Warning (Negative)"
-        
-        return{
-            "debt_to_equity" : debt_to_equity,
-            "interest_coverage": round(float(coverage_ratio),2) if coverage_ratio is not None else None,
-            "fcf_negative":      diagnosis,
-            "Operating_Net_Working_Capital":round(float(operating_nwc),2),
-            "Operating_Net_Working_Capital_status":operating_nwc_status,
-            "Total Debt":round(float(current_debt),2),
+
+        all_nwc_available = all(
+            v is not None for v in [current_assets, current_liabilities, cash, current_debt]
+        )
+        if all_nwc_available:
+            operating_nwc = (current_assets - cash) - (current_liabilities - current_debt)
+            operating_nwc_status = "Healthy" if operating_nwc > 0 else "Warning (Negative)"
+            nwc_value = round(float(operating_nwc), 2)
+        else:
+            nwc_value = None
+            operating_nwc_status = "Unavailable"
+
+        return {
+            "debt_to_equity":                        debt_to_equity,
+            "interest_coverage":                     round(float(coverage_ratio), 2) if coverage_ratio is not None else None,
+            "fcf_negative":                          diagnosis,
+            "Operating_Net_Working_Capital":         nwc_value,
+            "Operating_Net_Working_Capital_status":  operating_nwc_status,
+            "Total Debt":                            round(float(current_debt), 2) if current_debt is not None else None,
         }
     except Exception as e:
         return {"debt_to_equity": debt_to_equity, "error": str(e)}

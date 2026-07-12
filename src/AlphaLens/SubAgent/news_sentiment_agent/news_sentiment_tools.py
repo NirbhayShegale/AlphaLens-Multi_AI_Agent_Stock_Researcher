@@ -67,10 +67,10 @@ def earning_call(ticker: str)-> dict:
         response = requests.get(f"https://api.roic.ai/v2/company/earnings-calls/latest/{ticker}?apikey={api_key}")
         data = response.json()
         if data:
-            return data   
+            return data
+        return {"error": "Empty response from ROIC API"}
     except Exception as e:
         return {"error": str(e)}
-    
 
 @tool
 def get_earnings_history(ticker: str) -> dict:
@@ -128,7 +128,7 @@ def get_insider_transactions(ticker: str) -> dict:
         insider  = stock.insider_transactions
  
         if insider.empty:
-            return {"error": Exception("No insider data found")}
+            return {"error": "No insider data found"}
  
         transactions = []
         for _, row in insider.head(10).iterrows():

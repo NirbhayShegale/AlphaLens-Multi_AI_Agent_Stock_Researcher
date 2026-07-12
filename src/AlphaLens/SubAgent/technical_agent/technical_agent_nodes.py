@@ -1,4 +1,4 @@
-from langchain.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from langsmith import traceable
 import pandas_ta as ta
 import pandas as pd

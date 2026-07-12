@@ -25,7 +25,7 @@ def get_income_statement(ticker: str) -> dict:
         income = stock.financials  # annual income statement
  
         if income.empty:
-            return {"error": Exception("No income statement data found")}
+            return {"error": "No income statement data found"}
  
         result = {}
         for col in income.columns[:3]:  # last 3 years
@@ -81,7 +81,7 @@ def get_cash_flow(ticker: str) -> dict:
         cf = stock.cashflow
  
         if cf.empty:
-            return {"error": Exception("No cash flow data found")}
+            return {"error": "No cash flow data found"}
  
         result = {}
         for col in cf.columns[:3]:  # last 3 years
