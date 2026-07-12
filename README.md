@@ -167,6 +167,9 @@ ROC_AI_API_KEY=your_key
 LANGCHAIN_TRACING_V2=true
 LANGCHAIN_API_KEY=your_key     # free at smith.langchain.com
 LANGCHAIN_PROJECT=AlphaLens
+
+# ticker Extraction
+FMP_API_KEY=you_key
 ```
 
 ### 4. Run the Application
@@ -186,14 +189,6 @@ uv run streamlit run Frontend/app.py
 ```bash
 uv run python main.py
 ```
-
----
-
-## 🚧 Limitations
-
-- Agent tests are manual smoke scripts run against a hardcoded ticker, not an automated CI suite.
-- No caching layer — every query re-fetches live data and re-runs all five agents from scratch.
-- Data quality is bounded by `yfinance`'s free-tier fields, which can be sparse for smaller-cap or non-US tickers.
 
 <div align="center">
   <br/>
